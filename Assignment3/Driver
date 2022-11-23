@@ -1,0 +1,157 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+/*
+* @Author Alexander Kemos 100375966
+* @Version 1.0
+* @since 2022-10-11
+*/
+
+/*
+* Ask user for a file containing a 2D matrix of numbers.
+* Store values in a 2D vector.
+* Find a continuous path through the matrix starting at 
+* the top left and moving to the bottom right,
+* where total sum of the path is greater than zero
+* while using only ones each position and moving on 4 directions:
+* Up, Down, Left and Right.
+* Mark path using ‘V’ for down, ‘^’ for up, ‘>’ for right,‘<’ for left,
+* ‘X’ where the path ends and ‘-‘ for all other positions in the matrix
+* and print the path.
+*/
+
+//Initialize a 2D int vector with rows and collumns
+// and assign values from iput stream
+bool markPosition(vector<vector<int>>& matrix, vector<vector<char>>& chMatrix,
+                 unsigned ir, unsigned ic, int sum);
+vector<vector<int>> vectorInit(int row, int c, int temp, ifstream & file){
+    vector<vector<int>> matrix(row, vector<int>(c, 0));
+    for(int i = 0; i < row; i++){
+        for (int j = 0; j < c; j++){
+            file >> temp;
+            matrix[i][j] = temp;
+        }
+    }
+    return matrix;
+}
+
+//Ask for a file the user that contain a matrix, 
+//Initialize and populate data in a 2D vector
+vector<vector<int>> fileInput(ifstream & file, int & row, int & c){
+    string fileName, line;
+    int temp =0;
+
+    cout << "Please insert a file with it's path" << endl;
+    cin >> fileName;
+    file.open(fileName);
+    if (file.is_open()){
+        getline(file, line);
+        row = stoi(line);
+        getline(file, line);
+        c = stoi(line);
+
+        vector<vector<int>> matrix = vectorInit(row,c,temp,file);
+        return matrix;
+    }
+    else{
+        cout << " Failed to open file. " << endl;
+        vector<vector<int>> matrix;
+        return matrix;
+    }
+}
+
+//Print 2D int Vector
+void print(vector<vector<int>> matrix){
+    cout  << "OG matrix" << endl;
+    for(vector<int> x : matrix){
+        cout << endl;
+        for(int z : x){
+            cout << setw(4) << z << " ";
+        }
+    }
+    cout << "\n" << endl;
+}
+
+//Print 2D char Vector
+void print(vector<vector<char>> matrix){
+    cout << "Path matrix" << endl;
+    for(vector<char> x : matrix){
+        cout << endl;
+        for(char z : x){
+            cout << setw(4) << z << " ";
+        }
+    }
+    cout << "\n" << endl;
+}
+
+//Find a valid path from top left to bottom right and
+//mark path in char 2D vector.
+bool pathFinder(const vector<vector<int>> & matrix, vector<vector<char>> & chMatrix,
+                 unsigned ir, unsigned ic, int sum, vector<vector<bool>> flagMatrix){
+
+    //Check if out of bounds
+    unsigned z = 0;
+    if(ir >= matrix.size() || ir < z || ic >= matrix[0].size() || ic < z ){
+        return false;
+    }
+    
+    //Check if you have visit this place before 
+    if(flagMatrix[ir][ic] == true){
+        return false;
+    }
+    //Check if path sum greater than zero
+    if(ir == matrix.size()-1 && ic == matrix[0].size()-1){
+        sum += matrix[ir][ic];
+        chMatrix[ir][ic] = 'X';
+        if(sum > 0){
+            return true;
+        }
+        return false;
+    }
+
+    //Add new sum
+    sum += matrix[ir][ic];
+    //Mark visited Position
+    flagMatrix[ir][ic] = true;
+    if(pathFinder(matrix, chMatrix, ir-1, ic, sum, flagMatrix)){
+        chMatrix[ir][ic] = '^';
+        return true;
+    }
+    else if(pathFinder(matrix, chMatrix, ir+1, ic, sum,flagMatrix)){
+        chMatrix[ir][ic] = 'V';
+        return true;
+    }
+    else if(pathFinder(matrix, chMatrix, ir, ic-1, sum,flagMatrix)){
+        chMatrix[ir][ic] = '<';
+        return true;
+    }
+    else if(pathFinder(matrix, chMatrix, ir, ic+1, sum,flagMatrix)){
+        chMatrix[ir][ic] = '>';
+        return true;
+    }
+    chMatrix[ir][ic] = '-'; 
+    return false;
+}
+
+int main(){
+    int row = 0, c = 0;
+    ifstream file;
+    
+    //Create 2D vectors int, char, bool.
+    vector<vector<int>> matrix = fileInput(file, row, c);
+    vector<vector<char>> chMatrix(row, vector<char>(c, '-'));
+    vector<vector<bool>> flagMatrix(row, vector<bool>(c, false));
+
+    print(matrix);
+    if(pathFinder(matrix, chMatrix, 0, 0, 0, flagMatrix)){
+        print(chMatrix);
+    } 
+    else{
+        cout << "No path Found" << endl;
+    }  
+    return 0;
+}
