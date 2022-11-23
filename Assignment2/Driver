@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+/*
+* @Author Alexander Kemos 100375966
+* @Version 1.0
+* @since 2022-09-30
+*/
+
+/*Ask user for how many coins should be flipped
+*generate all the possible permiations of heads and tails
+*and print result.
+*/
+
+//Generate and store count all possible permations in vector v
+void coutPerm(int n, int h, vector<int> & v){
+    if (n==0){
+        v[h]++; //Increment Vector at index h by 1
+        return;
+    }
+    coutPerm(n-1, h+1, v); // Increament Head count by 1
+    coutPerm(n-1, h+0, v); // Increment Heads by zero, simulate incrementing tails by
+}
+
+//Print total possible permiations of each combination of heads and tails
+void vPrint(int i, const vector<int> & v){
+    if(i <= 0){
+        return;
+    }
+    
+    vPrint(i-1, v);
+    cout << i-1 << "H " << v.size() -i << " T : " << v[i-1] << endl;
+}
+
+//Generate vector of size of coins used plus one
+void vectGen(vector<int> & v, int n){
+    if(n <= -1){
+        return;
+    }
+    v.push_back(0);
+    vectGen(v, n-1);
+}
+
+int main(){
+    int n;
+    vector<int> v;
+    cout << "How many coins do you wish to flip? " << endl;
+    cin >> n;
+    vectGen(v, n);
+    coutPerm(n, 0, v);
+    vPrint(v.size(), v);
+
+    return 0;
+}
