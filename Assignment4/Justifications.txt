@@ -1,0 +1,18 @@
+Program one:
+
+I decided to create the random string using a for loop with O(n) time complexity as it although I could do the same with recursion
+a recursive program will take more time to execute due to the overhead of function calls which is much higher than that of iteration.
+For the same reason, I decided to use a for loop to separate to 2 strings (upper and lower string) the mixed string 
+and then add them back together as this loop is O(n).
+
+The Big O notation of this program is O(n). Where N is the number of characters (in this case 16).
+
+Program two:
+
+I decided to create the 8-digit vectors using a for loop with O(n) time complexity as it although I could do the same with recursion
+a recursive program will take more time to execute due to the overhead of function calls which is much higher than that of iteration.
+I decided to then merge and sort them using a merge sort for two reasons. First of all, A merge sort has an average time O(nlogn) which is
+one of the most efficient sorting algorithms. On top of that, in a merge sort, we call the helper function merge (that merges the split vectors)
+that I also call before sorting, by itself to merge our 2 vectors and then sort them. 
+
+The time complexity of this program is O(nlogn).
