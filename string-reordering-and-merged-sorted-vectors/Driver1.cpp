@@ -3,7 +3,7 @@
 using namespace std;
 
 /*
-* @Author Alexander Kemos 100375966
+* @Author Alexander Kemos
 * @Version 1.0
 * @since 2022-10-24
 */
