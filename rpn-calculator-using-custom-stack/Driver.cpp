@@ -3,10 +3,11 @@
 using namespace std;
 /*
 reverse polish notation 
-//cases of invalid equation
-//positive signle integers
-// stack should hold doubles
-//ss.pushstack make sure minusing zero*/
+cases of invalid equation
+positive signle integers
+stack should hold doubles
+ss.pushstack make sure minusing zero
+*/
 
 
 int main(){
